@@ -23,30 +23,34 @@ if (-not [String]::Equals($top, (Normalize-PathLike $repo), [System.StringCompar
 if ([string]::IsNullOrWhiteSpace($Branch)) {
   $Branch = (git rev-parse --abbrev-ref HEAD).Trim()
 }
+
 $hasUpstream = $true
-$upstream = git rev-parse --abbrev-ref @{u} 2>$null
+$upstream = git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>$null
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($upstream)) {
   $hasUpstream = $false
   $upstream = "$Remote/$Branch (will set)"
+} else {
+  $upstream = $upstream.Trim()
 }
 
-# ahead/behind
+# ahead/behind（upstream があるときのみ）
 $ahead = 0; $behind = 0
 if ($hasUpstream) {
-  $counts = (git rev-list --left-right --count @{u}...HEAD) -split '\s+'
+  # upstream...HEAD の差分をカウント
+  $counts = (git rev-list --left-right --count "$upstream...HEAD") -split '\s+'
   if ($counts.Length -ge 2) { $behind = [int]$counts[0]; $ahead = [int]$counts[1] }
 }
 
 Write-Host "=== PLAN: git push ==="
-Write-Host ("remote     : {0}" -f $Remote)
-Write-Host ("branch     : {0}" -f $Branch)
-Write-Host ("upstream   : {0}" -f $upstream)
+Write-Host ("remote       : {0}" -f $Remote)
+Write-Host ("branch       : {0}" -f $Branch)
+Write-Host ("upstream     : {0}" -f $upstream)
 if ($hasUpstream) {
-  Write-Host ("ahead/behind: +{0} / -{1}" -f $ahead, $behind)
+  Write-Host ("ahead/behind : +{0} / -{1}" -f $ahead, $behind)
 }
 Write-Host "`n-- Commits to push --"
 if ($hasUpstream) {
-  git log --oneline @{u}..HEAD -n 50
+  git log --oneline "$upstream..HEAD" -n 50
 } else {
   git log --oneline -n 50
 }
