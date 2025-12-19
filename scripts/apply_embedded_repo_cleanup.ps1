@@ -59,10 +59,11 @@ foreach ($d in $embeddedRel) {
 $token = Read-Host "実行するには 承認 と入力してください"
 if ($token -ne "承認") { Write-Host "承認なし。中止します。"; exit 2 }
 
-# .gitignore 追記
+# .gitignore 追記（安全な連結方法）
 $gitignoreUpdated = $false
 if ($toAppend.Count -gt 0) {
-  Add-Content -Path $gitignorePath -Value "`n# embedded git repos`n$($toAppend -join \"`n\")" -Encoding UTF8
+  $appendText = "`n# embedded git repos`n" + ($toAppend -join "`n")
+  Add-Content -Path $gitignorePath -Value $appendText -Encoding UTF8
   $gitignoreUpdated = $true
   Write-Host ".gitignore に追記:"; $toAppend | ForEach-Object { Write-Host " + $_" }
 } else {
