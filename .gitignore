@@ -3,3 +3,9 @@
 *.tmp
 .DS_Store
 Thumbs.db
+
+# embedded git repos
+ai_dev_core/
+notegen-gpts-api/
+particle-git/
+web-access-dashboard/
