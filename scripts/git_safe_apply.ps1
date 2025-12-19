@@ -6,7 +6,25 @@ param(
     [string]$Token = ""
 )
 
-Set-Location "E:\ai_dev_core"
+# 期待ルート
+$expectedRootRaw = "E:\ai_dev_core"
+
+function Normalize-PathLike([string]$p) {
+    if ([string]::IsNullOrWhiteSpace($p)) { return "" }
+    # Git は E:/ai_dev_core のように / 区切りを返す場合がある
+    $winish = $p -replace '/', '\'
+    try {
+        return [System.IO.Path]::GetFullPath($winish)
+    } catch {
+        # 既存でなくても単純置換だけ返す
+        return $winish
+    }
+}
+
+$expected = Normalize-PathLike $expectedRootRaw
+
+# カレントを固定
+Set-Location $expected
 
 # 安全確認
 $top = git rev-parse --show-toplevel 2>$null
@@ -15,8 +33,12 @@ if ($LASTEXITCODE -ne 0 -or -not $inside -or -not $top) {
     Write-Error "Git 管理下ではありません。処理を中止します。"
     exit 1
 }
-if ($top -ne "E:\ai_dev_core") {
-    Write-Error "想定外のパスです: $top"
+
+$topNorm = Normalize-PathLike $top
+
+# 大文字小文字/区切りの違いを無視して比較
+if (-not [String]::Equals($topNorm, $expected, [System.StringComparison]::OrdinalIgnoreCase)) {
+    Write-Error ("想定外のパスです: {0} (expected {1})" -f $top, $expected)
     exit 1
 }
 
