@@ -22,7 +22,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -102,7 +102,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -211,7 +211,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -278,7 +278,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -413,7 +413,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -535,7 +535,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -602,7 +602,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach($kv in $q -split "&"){ if(-not $kv){continue}
+  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
     $p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
@@ -761,3 +761,4 @@ function Wait-And-Show-LastResult([string]$repo, [string]$ap, [int]$timeoutSec =
     }
   }
 }
+
