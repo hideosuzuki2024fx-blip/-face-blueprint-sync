@@ -741,3 +741,23 @@ function AutoPost-Result([string]$text) {
     Write-Host "自動貼り付けに失敗: $($_.Exception.Message)"
   }
 }
+
+function Wait-And-Show-LastResult([string]$repo, [string]$ap, [int]$timeoutSec = 20) {
+  $last = Join-Path $repo ".gitgpt\last_result.txt"
+  $startUtc = $null
+  if (Test-Path $last) {
+    try { $startUtc = (Get-Item $last -ErrorAction SilentlyContinue).LastWriteTimeUtc } catch {}
+  }
+  $deadline = (Get-Date).AddSeconds($timeoutSec)
+  while ((Get-Date) -lt $deadline) {
+    Start-Sleep -Milliseconds 300
+    $fi = Get-Item $last -ErrorAction SilentlyContinue
+    if ($fi -and (-not $startUtc -or $fi.LastWriteTimeUtc -gt $startUtc)) {
+      $text = Get-Content $last -Raw -Encoding UTF8
+      try { $text | Set-Clipboard } catch {}
+      Start-Process -FilePath "notepad.exe" -ArgumentList "`"$last`""
+      if ($ap -eq "1") { AutoPost-Result $text }
+      return
+    }
+  }
+}
