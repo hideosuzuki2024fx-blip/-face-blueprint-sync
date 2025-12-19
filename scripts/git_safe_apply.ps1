@@ -1,68 +1,65 @@
 param(
-    [Parameter(Mandatory=$true)]
-    [string]$Message,
-    [string[]]$Paths = @("."),
-    [switch]$NoVerify,
-    [string]$Token = ""
+    [Parameter(Mandatory=\True)]
+    [string]\,
+    [string[]]\ = @("."),
+    [switch]\,
+    [string]\ = "",
+    [string]\ = ""
 )
 
-# 期待ルート
-$expectedRootRaw = "E:\ai_dev_core"
-
 function Normalize-PathLike([string]$p) {
-    if ([string]::IsNullOrWhiteSpace($p)) { return "" }
-    # Git は E:/ai_dev_core のように / 区切りを返す場合がある
-    $winish = $p -replace '/', '\'
-    try {
-        return [System.IO.Path]::GetFullPath($winish)
-    } catch {
-        # 既存でなくても単純置換だけ返す
-        return $winish
-    }
+  if ([string]::IsNullOrWhiteSpace($p)) { return "" }
+  $winish = $p -replace '/', '\'
+  try { return [System.IO.Path]::GetFullPath($winish) } catch { return $winish }
+}
+function Resolve-RepoRoot([string]$RepoRootParam) {
+  $stateFile = "E:\ai_dev_core\.gitgpt\current_repo.txt"
+  if (-not [string]::IsNullOrWhiteSpace($RepoRootParam)) {
+    return Normalize-PathLike $RepoRootParam
+  }
+  if (Test-Path $stateFile) {
+    $p = Get-Content $stateFile -Raw -Encoding UTF8
+    if (-not [string]::IsNullOrWhiteSpace($p)) { return Normalize-PathLike $p.Trim() }
+  }
+  return "E:\ai_dev_core"
 }
 
-$expected = Normalize-PathLike $expectedRootRaw
-
-# カレントを固定
-Set-Location $expected
+\ = Resolve-RepoRoot \
+\ = Normalize-PathLike \
+Set-Location \
 
 # 安全確認
-$top = git rev-parse --show-toplevel 2>$null
-$inside = git rev-parse --is-inside-work-tree 2>$null
-if ($LASTEXITCODE -ne 0 -or -not $inside -or -not $top) {
-    Write-Error "Git 管理下ではありません。処理を中止します。"
-    exit 1
+\ = git rev-parse --show-toplevel 2>$null
+\ = git rev-parse --is-inside-work-tree 2>$null
+if ($LASTEXITCODE -ne 0 -or -not \ -or -not \) { Write-Error "Git 管理下ではありません。"; exit 1 }
+\ = Normalize-PathLike \
+if (-not [String]::Equals(\, \, [System.StringComparison]::OrdinalIgnoreCase)) {
+    Write-Error ("想定外のパスです: {0} (expected {1})" -f \, \); exit 1
 }
 
-$topNorm = Normalize-PathLike $top
-
-# 大文字小文字/区切りの違いを無視して比較
-if (-not [String]::Equals($topNorm, $expected, [System.StringComparison]::OrdinalIgnoreCase)) {
-    Write-Error ("想定外のパスです: {0} (expected {1})" -f $top, $expected)
-    exit 1
-}
-
-# 差分要約
+# PLAN
 Write-Host "=== PLAN (git status) ==="
-git status --porcelain=v1
+git status --porcelain=v1 -- \
+Write-Host "
+=== DIFF (summary) ==="
+git diff --stat -- \
 
-Write-Host "`n=== DIFF (summary) ==="
-git diff --stat
-
-# 承認トークン確認
-if ($Token -ne "承認") {
-    Write-Host "`n承認トークンがありません。実行を中止します。"
-    Write-Host "実行する場合は -Token 承認 を付けてください。"
-    exit 2
+# 承認
+if (\ -ne "承認") {
+    Write-Host "
+承認トークンがありません。実行を中止します。"
+    Write-Host "実行する場合は -Token 承認 を付けてください。"; exit 2
 }
 
-# 実行
-Write-Host "`n=== APPLY (git add) ==="
-git add -- $Paths
+# APPLY
+Write-Host "
+=== APPLY (git add) ==="
+git add -- \
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host "`n=== APPLY (git commit) ==="
-$commitArgs = @("commit","-m",$Message)
-if ($NoVerify) { $commitArgs += "--no-verify" }
+Write-Host "
+=== APPLY (git commit) ==="
+\ = @("commit","-m",\)
+if (\) { \ += "--no-verify" }
 git @commitArgs
 exit $LASTEXITCODE

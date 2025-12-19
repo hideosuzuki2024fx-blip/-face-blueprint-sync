@@ -1,71 +1,62 @@
 param(
-  [string]$Remote = "origin",
-  [string]$Branch = "",
-  [string]$Token = "",
-  [string]$ConfirmPush = ""
+  [string]\ = "origin",
+  [string]\ = "",
+  [string]\ = "",
+  [string]\ = "",
+  [string]\ = ""
 )
 
 function Normalize-PathLike([string]$p) {
   if ([string]::IsNullOrWhiteSpace($p)) { return "" }
   $winish = $p -replace '/', '\'
-  try { [System.IO.Path]::GetFullPath($winish) } catch { $winish }
+  try { return [System.IO.Path]::GetFullPath($winish) } catch { return $winish }
+}
+function Resolve-RepoRoot([string]$RepoRootParam) {
+  $stateFile = "E:\ai_dev_core\.gitgpt\current_repo.txt"
+  if (-not [string]::IsNullOrWhiteSpace($RepoRootParam)) {
+    return Normalize-PathLike $RepoRootParam
+  }
+  if (Test-Path $stateFile) {
+    $p = Get-Content $stateFile -Raw -Encoding UTF8
+    if (-not [string]::IsNullOrWhiteSpace($p)) { return Normalize-PathLike $p.Trim() }
+  }
+  return "E:\ai_dev_core"
 }
 
-# ルート固定 & 安全確認
-$repo = "E:\ai_dev_core"
-Set-Location $repo
-$top = Normalize-PathLike (git rev-parse --show-toplevel)
-if (-not [String]::Equals($top, (Normalize-PathLike $repo), [System.StringComparison]::OrdinalIgnoreCase)) {
-  Write-Error ("想定外のパスです: {0}" -f $top); exit 1
-}
+\ = Resolve-RepoRoot \
+Set-Location \
+\ = Normalize-PathLike (git rev-parse --show-toplevel)
+if (-not [String]::Equals(\, (Normalize-PathLike \), [System.StringComparison]::OrdinalIgnoreCase)) { Write-Error ("想定外のパスです: {0}" -f \); exit 1 }
 
-# 現在ブランチ/Upstream検出
-if ([string]::IsNullOrWhiteSpace($Branch)) {
-  $Branch = (git rev-parse --abbrev-ref HEAD).Trim()
-}
+if ([string]::IsNullOrWhiteSpace(\)) { \ = (git rev-parse --abbrev-ref HEAD).Trim() }
 
-$hasUpstream = $true
-$upstream = git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>$null
-if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($upstream)) {
-  $hasUpstream = $false
-  $upstream = "$Remote/$Branch (will set)"
-} else {
-  $upstream = $upstream.Trim()
-}
+\ = \True
+\ = git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>$null
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace(\)) { \ = \False; \ = "\/\ (will set)" } else { \ = \.Trim() }
 
-# ahead/behind（upstream があるときのみ）
-$ahead = 0; $behind = 0
-if ($hasUpstream) {
-  # upstream...HEAD の差分をカウント
-  $counts = (git rev-list --left-right --count "$upstream...HEAD") -split '\s+'
-  if ($counts.Length -ge 2) { $behind = [int]$counts[0]; $ahead = [int]$counts[1] }
-}
-
+# PLAN
 Write-Host "=== PLAN: git push ==="
-Write-Host ("remote       : {0}" -f $Remote)
-Write-Host ("branch       : {0}" -f $Branch)
-Write-Host ("upstream     : {0}" -f $upstream)
-if ($hasUpstream) {
-  Write-Host ("ahead/behind : +{0} / -{1}" -f $ahead, $behind)
-}
-Write-Host "`n-- Commits to push --"
-if ($hasUpstream) {
-  git log --oneline "$upstream..HEAD" -n 50
+Write-Host ("repo         : {0}" -f \)
+Write-Host ("remote       : {0}" -f \)
+Write-Host ("branch       : {0}" -f \)
+Write-Host ("upstream     : {0}" -f \)
+if (\) {
+  \ = (git rev-list --left-right --count "\...HEAD") -split '\s+'
+  if (\.Length -ge 2) { Write-Host ("ahead/behind : +{0} / -{1}" -f \[1], \[0]) }
+  Write-Host "
+-- commits to push --"; git log --oneline "\..HEAD" -n 50
 } else {
-  git log --oneline -n 50
+  Write-Host "
+-- commits to push (no upstream yet) --"; git log --oneline -n 50
 }
 
-# 二段階承認
-if ($Token -ne "承認" -or $ConfirmPush -ne "承認") {
-  Write-Host "`n実行には二段階承認が必要です。"
-  Write-Host "例: .\scripts\git_safe_push.ps1 -Token 承認 -ConfirmPush 承認"
-  exit 2
+if (\ -ne "承認" -or \ -ne "承認") {
+  Write-Host "
+実行には二段階承認が必要です。"
+  Write-Host "例: .\scripts\git_safe_push.ps1 -RepoRoot "\" -Token 承認 -ConfirmPush 承認"; exit 2
 }
 
-Write-Host "`n=== APPLY: git push ==="
-if ($hasUpstream) {
-  git push $Remote $Branch
-} else {
-  git push -u $Remote $Branch
-}
+Write-Host "
+=== APPLY: git push ==="
+if (\) { git push \ \ } else { git push -u \ \ }
 exit $LASTEXITCODE
