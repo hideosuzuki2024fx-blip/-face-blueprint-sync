@@ -1,3 +1,16 @@
+function Parse-Query([string]$query) {
+  $r = @{}
+  if ([string]::IsNullOrWhiteSpace($query)) { return $r }
+  $parts = $query -split '&'
+  foreach ($kv in $parts) {
+    if (-not $kv) { continue }
+    $pair = $kv.Split('=',2)
+    $k = [System.Web.HttpUtility]::UrlDecode($pair[0])
+    $v = if ($pair.Count -gt 1) { [System.Web.HttpUtility]::UrlDecode($pair[1]) } else { "" }
+    $r[$k] = $v
+  }
+  return $r
+}
 param([Parameter(Mandatory=$true)][string]$Url)
 
 Add-Type -AssemblyName System.Web
@@ -22,8 +35,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -102,8 +114,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -211,8 +222,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -278,8 +288,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -413,8 +422,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -535,8 +543,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -602,8 +609,7 @@ function Normalize([string]$p){
 }
 function Q([string]$q){
   $m=@{}; if ($q.StartsWith("?")){$q=$q.Substring(1)}
-  foreach ($kv in ($q.Split("&"))){ if(-not $kv){continue}
-    $p=$kv -split "=",2
+  $p = Parse-Query $q$p=$kv -split "=",2
     $k=[System.Web.HttpUtility]::UrlDecode($p[0])
     $v= if($p.Length -gt 1){[System.Web.HttpUtility]::UrlDecode($p[1])} else {""}
     $m[$k]=$v
@@ -761,4 +767,5 @@ function Wait-And-Show-LastResult([string]$repo, [string]$ap, [int]$timeoutSec =
     }
   }
 }
+
 
