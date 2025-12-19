@@ -166,3 +166,31 @@ switch ($intent) {
   }
   default { exit 0 }
 }
+
+# === Token 正規化 & 環境変数フォールバック ===
+$Token       = if ([string]::IsNullOrWhiteSpace($Token))       { $env:AI_GIT_TOKEN }       else { $Token }
+$ConfirmPush = if ([string]::IsNullOrWhiteSpace($ConfirmPush)) { $env:AI_GIT_PUSH_OK }     else { $ConfirmPush }
+$Token       = if ($Token)       { $Token.Trim() }       else { "" }
+$ConfirmPush = if ($ConfirmPush) { $ConfirmPush.Trim() } else { "" }
+
+function IsReadOnlyIntent([string]$i) { return ($i -eq "status" -or $i -eq "diff") }
+function NeedsDouble([string]$i)     { return ($i -eq "push") }
+
+# ---- 承認チェック（不足項目の明示化） ----
+if (-not (IsReadOnlyIntent $intent)) {
+  $missing = @()
+  if ($Token -ne "承認") { $missing += "Token" }
+  if (NeedsDouble $intent -and $ConfirmPush -ne "承認") { $missing += "ConfirmPush" }
+  if ($missing.Count -gt 0) {
+    Write-Host "`n承認が不足しています: $($missing -join ', ')。実行しません。"
+    Write-Host "実行例:"
+    switch ($intent) {
+      "push"   { Write-Host ".\scripts\nl_git_dispatcher.ps1 -Query `"$($Query)`" -Token 承認 -ConfirmPush 承認" }
+      default  { Write-Host ".\scripts\nl_git_dispatcher.ps1 -Query `"$($Query)`" -Token 承認" }
+    }
+    Write-Host "`n環境変数でも指定できます:"
+    Write-Host '$env:AI_GIT_TOKEN   = "承認"'
+    Write-Host '$env:AI_GIT_PUSH_OK = "承認"   # push 用'
+    exit 2
+  }
+}
