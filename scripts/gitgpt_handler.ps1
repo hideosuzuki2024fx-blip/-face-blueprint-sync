@@ -131,3 +131,4 @@ switch ($action) {
   }
   default { Write-Host "Unknown action: $action" }
 }
+
