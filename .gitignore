@@ -9,3 +9,9 @@ ai_dev_core/
 notegen-gpts-api/
 particle-git/
 web-access-dashboard/
+.gitgpt/
+gpt_read/
+gpt_read/**
+NoteGenerator/
+NoteGenerator/**
+scripts/gitgpt_daemon.ps1

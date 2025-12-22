@@ -1,2 +1,9 @@
 # normalize line endings
 * text=auto
+gpt/manifest.json text eol=lf
+gpt/allowlist.json text eol=lf
+GPT.md text eol=lf
+knowledge_manifest.json text eol=lf
+NoteMD/meta/*.json text eol=lf
+NoteMD/meta/*.md text eol=lf
+NoteMD/config/*.json text eol=lf
