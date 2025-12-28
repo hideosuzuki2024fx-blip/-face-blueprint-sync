@@ -1,29 +1,27 @@
 param(
   [string]$endpoint,
-  [string]$bearer  = $env:API_BEARER,
-  [string]$repo    = $env:REPO_SLUG,   # e.g. owner/face-blueprint-content
-  [string]$branch  = $env:BRANCH,      # e.g. main
-  [string]$path    = $env:YAML_PATH    # e.g. characters.yaml
+  [string]$bearer,
+  [string]$repo,
+  [string]$branch,
+  [string]$path
 )
 
-# エンドポイントの解決: 引数 > DEPLOY_ENDPOINT.txt > 環境変数
 if (-not $endpoint) {
-  $depFile = Join-Path $PSScriptRoot "..\DEPLOY_ENDPOINT.txt"
-  if (Test-Path $depFile) {
-    $endpoint = (Get-Content -Path $depFile -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
-  } elseif ($env:VERCEL_ENDPOINT) {
-    $endpoint = $env:VERCEL_ENDPOINT
-  }
+  $dep = Join-Path $PSScriptRoot "..\DEPLOY_ENDPOINT.txt"
+  if (Test-Path $dep) { $endpoint = (Get-Content $dep | Select-Object -First 1).Trim() }
+  elseif ($env:VERCEL_ENDPOINT) { $endpoint = $env:VERCEL_ENDPOINT }
 }
+if (-not $bearer) { $bearer = $env:API_BEARER }
+if (-not $repo)   { $repo   = $env:REPO_SLUG }
+if (-not $branch) { $branch = $env:BRANCH }
+if (-not $path)   { $path   = $env:YAML_PATH }
 
-if (-not $endpoint -or $endpoint -eq '' -or $endpoint -eq 'UNKNOWN') {
-  Write-Error "エンドポイント不明です。-endpoint で指定するか、DEPLOY_ENDPOINT.txt / VERCEL_ENDPOINT を設定してください。"
-  exit 1
-}
-if (-not $bearer) { Write-Error "API_BEARER が未設定です。"; exit 1 }
-if (-not $repo)   { Write-Error "REPO_SLUG が未設定です。"; exit 1 }
-if (-not $branch) { Write-Error "BRANCH が未設定です。"; exit 1 }
-if (-not $path)   { Write-Error "YAML_PATH が未設定です。"; exit 1 }
+# 入力検証
+if ([string]::IsNullOrWhiteSpace($endpoint) -or $endpoint -eq 'UNKNOWN') { Write-Error "エンドポイント不明"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($bearer)) { Write-Error "API_BEARER 未設定"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($repo))   { Write-Error "REPO_SLUG 未設定"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($branch)) { Write-Error "BRANCH 未設定"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($path))   { Write-Error "YAML_PATH 未設定"; exit 1 }
 
 $payload = @{
   op = "append_character"
