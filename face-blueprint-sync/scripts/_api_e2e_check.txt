@@ -1,0 +1,17 @@
+﻿# API end-to-end check
+Endpoint : https://face-blueprint-sync.vercel.app
+
+GET https://face-blueprint-sync.vercel.app/api/ping
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+POST https://face-blueprint-sync.vercel.app/api/register
+SKIP: ping/health not ready
+
+Notes:
+- If 404 on ping/health: set Vercel Project Settings -> General -> Root Directory = face-blueprint-sync, then redeploy from E:\ai_dev_core\face-blueprint-sync
+- If 401: API_BEARER mismatch (Production env) or missing Authorization header
+- If 404 only on /api/register: check that api/register.{ts,js} exists and deploy logs
+Timestamp: 2025-12-28 19:51:35 +09:00
