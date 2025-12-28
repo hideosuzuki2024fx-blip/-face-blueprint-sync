@@ -1,4 +1,4 @@
-﻿param(
+param(
   [string]$endpoint,
   [string]$bearer,
   [string]$repo,
@@ -16,7 +16,7 @@ if (-not $repo)   { $repo   = $env:REPO_SLUG }
 if (-not $branch) { $branch = $env:BRANCH }
 if (-not $path)   { $path   = $env:YAML_PATH }
 
-if ([string]::IsNullOrWhiteSpace($endpoint) -or $endpoint -eq 'UNKNOWN') { Write-Error "Endpoint unknown"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($endpoint) -or $endpoint -eq "UNKNOWN") { Write-Error "Endpoint unknown"; exit 1 }
 if ([string]::IsNullOrWhiteSpace($bearer)) { Write-Error "API_BEARER not set"; exit 1 }
 if ([string]::IsNullOrWhiteSpace($repo))   { Write-Error "REPO_SLUG not set"; exit 1 }
 if ([string]::IsNullOrWhiteSpace($branch)) { Write-Error "BRANCH not set"; exit 1 }
@@ -58,7 +58,7 @@ $payload = @{
   }
 } | ConvertTo-Json -Depth 8
 
-$uri = ($endpoint.TrimEnd('/') + '/api/register')
+$uri = ($endpoint.TrimEnd('/') + "/api/register")
 Write-Host "POST -> $uri"
 $result = Invoke-RestMethod -Method POST -Uri $uri `
   -Headers @{ Authorization = "Bearer $bearer"; "content-type" = "application/json" } `
