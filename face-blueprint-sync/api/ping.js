@@ -1,3 +1,3 @@
-module.exports = (req, res) => {
-  res.status(200).json({ ok: true, route: "ping" });
-};
+export default function handler(req, res) {
+  return res.status(200).send("pong");
+}
