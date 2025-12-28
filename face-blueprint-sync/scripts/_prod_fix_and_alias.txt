@@ -1,0 +1,23 @@
+﻿# prod deploy from subdir & alias promotion
+Deploy URL : https://face-blueprint-sync.vercel.app
+Prod URL   : https://face-blueprint-sync.vercel.app
+
+GET https://face-blueprint-sync.vercel.app/api/ping
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/ping
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+Alias result:
+
+
+Notes:
+- Deploy=200 / Prod=404 の場合は alias を切り替えて Prod を有効化しています。
+- それでも Prod が 404 の場合、Dashboard > Project Settings > General > Root Directory を 'face-blueprint-sync' に設定してから再デプロイしてください。
+Timestamp: 2025-12-28 20:02:23 +09:00
