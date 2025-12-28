@@ -1,0 +1,26 @@
+characters:
+  - name: "MAYA"
+    description: "soft feminine gravure model"
+    face_blueprint:
+      age: "adult"
+      face_shape: "soft oval, slightly heart-shaped"
+      jawline: "smooth, rounded"
+      cheekbones: "moderately high, gentle fullness"
+      skin: "fair to light warm tone, natural texture"
+      eyes: "medium almond-shaped, calm expression"
+      eye_color: "hazel to light brown"
+      eyebrows: "medium thickness, soft natural arch"
+      nose: "small to medium, straight bridge, rounded tip"
+      lips: "medium-full, natural curve"
+      hair:
+        color: "warm blonde"
+        length: "shoulder-length"
+        style: "soft straight or gentle waves"
+        part: "center or slight side part"
+    always_add:
+      - "portrait photo"
+      - "imaginary adult woman"
+      - "same face identity"
+      - "photorealistic"
+      - "cinematic natural lighting"
+      - "shallow depth of field"
