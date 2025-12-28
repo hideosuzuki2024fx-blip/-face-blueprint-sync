@@ -1,0 +1,12 @@
+﻿# vercel deploy (subdir enforced) & api check
+Endpoint : https://face-blueprint-sync.vercel.app
+
+GET https://face-blueprint-sync.vercel.app/api/hello
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+Note: If still 404, the Vercel Project may point to a different Root Directory.
+      Set Project Settings -> General -> Root Directory = face-blueprint-sync, then redeploy.
+Timestamp: 2025-12-28 19:42:03 +09:00
