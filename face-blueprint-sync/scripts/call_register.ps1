@@ -1,10 +1,24 @@
-param(
+﻿param(
   [string]$endpoint,
   [string]$bearer,
   [string]$repo,
   [string]$branch,
   [string]$path
 )
+
+function Get-Ascii([string]$s) {
+  if (-not $s) { return $s }
+  $ascii = [System.Text.Encoding]::ASCII.GetString([System.Text.Encoding]::ASCII.GetBytes($s))
+  if ($ascii -ne $s) { throw "Header contains non-ASCII characters. Use pure ASCII token." }
+  return $ascii
+}
+function CleanHeader([string]$s) {
+  if (-not $s) { return $s }
+  $s = $s -replace "[`r`n]", ""   # 改行除去
+  $s = $s.Trim()
+  $s = Get-Ascii $s
+  return $s
+}
 
 if (-not $endpoint) {
   $dep = Join-Path $PSScriptRoot "..\DEPLOY_ENDPOINT.txt"
@@ -21,6 +35,8 @@ if ([string]::IsNullOrWhiteSpace($bearer)) { Write-Error "API_BEARER not set"; e
 if ([string]::IsNullOrWhiteSpace($repo))   { Write-Error "REPO_SLUG not set"; exit 1 }
 if ([string]::IsNullOrWhiteSpace($branch)) { Write-Error "BRANCH not set"; exit 1 }
 if ([string]::IsNullOrWhiteSpace($path))   { Write-Error "YAML_PATH not set"; exit 1 }
+
+$bearer = CleanHeader $bearer
 
 $payload = @{
   op = "append_character"
@@ -47,21 +63,15 @@ $payload = @{
       lips = "medium-full, natural curve"
       hair = @{ color="warm blonde"; length="shoulder-length"; style="soft straight or gentle waves"; part="center or slight side part" }
     }
-    always_add = @(
-      "portrait photo",
-      "imaginary adult woman",
-      "same face identity",
-      "photorealistic",
-      "cinematic natural lighting",
-      "shallow depth of field"
-    )
+    always_add = @("portrait photo","imaginary adult woman","same face identity","photorealistic","cinematic natural lighting","shallow depth of field")
   }
 } | ConvertTo-Json -Depth 8
 
 $uri = ($endpoint.TrimEnd('/') + "/api/register")
 Write-Host "POST -> $uri"
 $result = Invoke-RestMethod -Method POST -Uri $uri `
-  -Headers @{ Authorization = "Bearer $bearer"; "content-type" = "application/json" } `
+  -Headers @{ Authorization = ("Bearer " + $bearer) } `
+  -ContentType "application/json" `
   -Body $payload
 
 $result | ConvertTo-Json -Depth 8
