@@ -1,1 +1,2 @@
-﻿ # face-blueprint-sync
+# -face-blueprint-sync
+Vercel deployment / API test repo
