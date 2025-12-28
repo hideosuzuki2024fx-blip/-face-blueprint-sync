@@ -1,0 +1,9 @@
+﻿# vercel re-link to subdir & redeploy
+Endpoint : https://face-blueprint-sync.vercel.app
+GET https://face-blueprint-sync.vercel.app/api/hello
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+Timestamp: 2025-12-28 19:39:32 +09:00
