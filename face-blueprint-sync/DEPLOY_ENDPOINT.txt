@@ -1,1 +1,1 @@
-﻿https://face-blueprint-sync.vercel.app
+https://face-blueprint-sync.vercel.app
