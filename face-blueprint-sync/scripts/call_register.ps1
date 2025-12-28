@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$endpoint,
   [string]$bearer,
   [string]$repo,
@@ -16,12 +16,11 @@ if (-not $repo)   { $repo   = $env:REPO_SLUG }
 if (-not $branch) { $branch = $env:BRANCH }
 if (-not $path)   { $path   = $env:YAML_PATH }
 
-# 入力検証
-if ([string]::IsNullOrWhiteSpace($endpoint) -or $endpoint -eq 'UNKNOWN') { Write-Error "エンドポイント不明"; exit 1 }
-if ([string]::IsNullOrWhiteSpace($bearer)) { Write-Error "API_BEARER 未設定"; exit 1 }
-if ([string]::IsNullOrWhiteSpace($repo))   { Write-Error "REPO_SLUG 未設定"; exit 1 }
-if ([string]::IsNullOrWhiteSpace($branch)) { Write-Error "BRANCH 未設定"; exit 1 }
-if ([string]::IsNullOrWhiteSpace($path))   { Write-Error "YAML_PATH 未設定"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($endpoint) -or $endpoint -eq 'UNKNOWN') { Write-Error "Endpoint unknown"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($bearer)) { Write-Error "API_BEARER not set"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($repo))   { Write-Error "REPO_SLUG not set"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($branch)) { Write-Error "BRANCH not set"; exit 1 }
+if ([string]::IsNullOrWhiteSpace($path))   { Write-Error "YAML_PATH not set"; exit 1 }
 
 $payload = @{
   op = "append_character"
