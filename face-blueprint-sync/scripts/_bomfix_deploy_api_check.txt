@@ -1,0 +1,19 @@
+﻿# BOM fix -> prod deploy -> API check
+Endpoint (deploy): https://face-blueprint-sync.vercel.app
+Prod URL         : https://face-blueprint-sync.vercel.app
+
+GET https://face-blueprint-sync.vercel.app/api/ping
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/ping
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+GET https://face-blueprint-sync.vercel.app/api/health
+ERR: リモート サーバーがエラーを返しました: (404) 見つかりません
+
+Notes:
+- ping/health が 404 の場合、Vercel の Project Settings > General > Root Directory を 'face-blueprint-sync' に設定してから再デプロイしてください。
+Timestamp: 2025-12-28 20:10:51 +09:00
