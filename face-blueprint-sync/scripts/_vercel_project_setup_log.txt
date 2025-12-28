@@ -1,0 +1,8 @@
+﻿# Vercel project setup (masked)
+Project : face-blueprint-sync
+Endpoint: https://face-blueprint-sync-di99jgt9v-maogons-projects.vercel.app
+API_BEARER: 8821*** (len=7)
+GITHUB_TOKEN: ghp_*** (len=40)
+TestLog:
+Test failed: リモート サーバーがエラーを返しました: (401) 許可されていません
+Timestamp: 2025-12-28 19:30:38 +09:00
