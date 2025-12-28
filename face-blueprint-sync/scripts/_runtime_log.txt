@@ -1,0 +1,35 @@
+﻿**********************
+Windows PowerShell トランスクリプト開始
+開始時刻: 20251228191353
+ユーザー名: WIN-SUBLO2JH4IG\MaoGon
+RunAs ユーザー: WIN-SUBLO2JH4IG\MaoGon
+構成名: 
+コンピューター: WIN-SUBLO2JH4IG (Microsoft Windows NT 10.0.26200.0)
+ホスト アプリケーション: powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -NoExit -File E:\ai_dev_core\face-blueprint-sync\scripts\run_env_setup_and_test.ps1
+プロセス ID: 17684
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Endpoint: Set-Location "E:\ai_dev_core"
+POST -> Set-Location "E:\ai_dev_core"/api/register
+PS>終了エラー(Invoke-RestMethod): "無効な URI: ホスト名を解析できませんでした。"
+>> 終了エラー(Invoke-RestMethod): "無効な URI: ホスト名を解析できませんでした。"
+E:\ai_dev_core\face-blueprint-sync\scripts\run_env_setup_and_test.ps1 : Error during execution: 無効な URI: ホスト名を解析できませんでした
+。
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,run_env_setup_and_test.ps1
+E:\ai_dev_core\face-blueprint-sync\scripts\run_env_setup_and_test.ps1 : Error during execution: 無効な URI: ホスト名を
+解析できませんでした。
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,run_env_setup_and_test.ps1
+
+**********************
+Windows PowerShell トランスクリプト終了
+終了時刻: 20251228191353
+**********************

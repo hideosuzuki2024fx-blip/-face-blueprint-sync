@@ -10,3 +10,4 @@ dist/
 
 # その他不要ファイル
 *.log
+.vercel
